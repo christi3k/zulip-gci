@@ -46,7 +46,7 @@ the tool in `remotedev/create.py` in this repository).
 Once requested, it will only take a few minutes to create your instance. Your
 mentor will let you know when it is complete and available.
 
-## Next steps
+## Step 4: Connect to your dev instance
 
 Once your remote dev instance is ready:
 
@@ -59,6 +59,8 @@ Once your remote dev instance is ready:
 - While the dev server is running, you can see the Zulip server in your browser
   at http://username.zulipdev.org:9991.
 
+## Next steps
+
 Once you've confirmed you can connect to your remote server, take a look at:
 
 * [developing remotely][rtd-dev-remote] for tips on using the remote dev
@@ -69,6 +71,33 @@ Next, read the following to learn more about developing for Zulip:
 
 * [Using the Development Environment][rtd-using-dev-env]
 * [Testing][rtd-testing]
+
+## Tips
+
+### Keeping up to date
+
+Periodically, you should fetch changes from the main
+[zulip/zulip][github-zulip-zulip] repository and merge them into your `master`
+tracking branch:
+
+```
+$ git fetch upstream
+$ git checkout master
+$ git merge upstream/master
+```
+
+### Always work in a feature branch
+
+As mentioned in detail in our [Git & GitHub Guide][rtd-git-guide], it's a good
+idea to always work in a feature branch, **not in master**.
+
+To create a feature branch, make sure you're in the `zulip` directory and use
+`git checkout` with the `-b` option:
+
+```
+$ git checkout -b my-feature upstream/master Switched to a new branch
+'my-feature'
+```
 
 [github-join]: https://github.com/join
 [github-help-add-ssh-key]: https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
@@ -82,3 +111,4 @@ Next, read the following to learn more about developing for Zulip:
 [rtd-dev-remote]: https://zulip.readthedocs.io/en/latest/dev-remote.html
 [rtd-git-guide]: http://zulip.readthedocs.io/en/latest/git-guide.html
 [gitbook-rebase]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
+[github-zulip-zulip]: https://github.com/zulip/zulip/
