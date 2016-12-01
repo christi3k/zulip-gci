@@ -2,7 +2,7 @@
 
 ## What is in a Git repository?
 
-Every Git repository has a **`.git`** and and **working copy**:
+Every Git repository has a **`.git`** directory and and **working copy**:
 
 ```
 *--------------*
@@ -15,28 +15,39 @@ Every Git repository has a **`.git`** and and **working copy**:
 *--------------*
 ```
 
-The `.git` directory contains:
+The **`.git`** directory contains:
 
-* The **refs database** for the repository, which contains its complete history. You can think of it like a *database* of all the work ever done on the project.
-* The **index**, which is a **staging area** for the changes from your *working tree* that will become part of your next commit.
+* The **refs database** for the repository, which contains its complete
+  history. You can think of it like a database of all the work ever done on the
+  project.
+* The **index**, which is a *staging area* for the changes from your **working
+  tree** that will become part of your next commit.
 
 ```
 *------------------*
 | .git             |
 |  | refs database | <--- complete history; all changes ever made to the repository
-|  | index         | <--- staging area for changing to your *working tree*
+|  | index         | <--- staging area for changes to your *working tree*
 *------------------*      that will be included next time you `git commit`
 ```
 
-Making changes to the `.git` directory is an advanced topic. Don't make changes to it or try to delete it if you are new to using Git.
+Making changes to the `.git` directory is an advanced topic. Don't make changes
+to it or try to delete it if you are new to using Git.
+
+The **working tree**, sometimes called *working copy* is everything inside your
+project directory that is not the `.git` directory. It is where you will
+modifiy, add, and delete files as you work.
 
 ## What happens when you `git clone`?
 
-When you `git clone <url>` you create a **complete** local copy of the Git repository at *url*.
+When you `git clone <url>` you create a **complete** local copy of the Git
+repository located at *url*.
 
-This copy has a **.git** directory and a **working copy**, just like every Git repository.
+This copy has a **.git** directory and a **working copy**, just like every Git
+repository.
 
-The Git repository that you have cloned to your laptop, or on a remote server, are basically the same as the repository that is hosted on GitHub:
+The Git repository that you have cloned to your laptop, or on a remote server,
+are basically the same as the repository that is hosted on GitHub:
 
 ```
  LAPTOP              GITHUB              REMOTE SERVER
@@ -50,7 +61,8 @@ The Git repository that you have cloned to your laptop, or on a remote server, a
 *--------------*    *--------------*    *--------------*
 ```
 
-After you `git clone` from a GitHub url, you now have a complete copy of that repository on your laptop:
+After you `git clone` from a GitHub url, you now have a **complete copy** of
+that repository on your laptop:
 
 ```
  LAPTOP                               GITHUB         
@@ -64,13 +76,18 @@ After you `git clone` from a GitHub url, you now have a complete copy of that re
 *--------------*                     *--------------*
 ```
 
-At the moment you `git clone`, your `.git` directory will have the same **refs database** and **index** as the repository on GitHub. Both repositories are completely *in sync* when you first clone.
+At the moment you `git clone`, your `.git` directory will have the same **refs
+database** and **index** as the repository on GitHub. Both repositories are
+completely *in sync* when you first clone.
 
 ## What happens when you stage and commit changes
 
-As you work, you'll make changes in your **working tree** or **working copy** on your laptop. (Remember, that's all of files not part of `.git` directory).
+As you work, you'll make changes in your **working tree** (working copy)
+on your laptop. (Remember, that's all of files not part of `.git` directory).
 
-As you work, you modify files in the working tree and it becomes out of sync with the index. When you run `git status` git compares your *working tree* against your *index* and tells you what has changed.
+As you work, you modify files in the *working tree* and it becomes out of sync
+with the *index*. When you run `git status` git compares your *working tree*
+against your *index* and tells you what has changed.
 
 In this example, we have created a new file, `changes.py`:
 
@@ -85,8 +102,10 @@ In this example, we have created a new file, `changes.py`:
 *-------------------------*               *--------------*   
 ```                                      
 
+### Staging to the index with `git add`
+
 As you complete work, you **stage** these files to the **index** with `git add`
-and this brings the working tree and the index back into sync:
+and this brings the *working tree* and the *index* back into sync:
 
 ```
  WORKING TREE                               INDEX                 
@@ -101,7 +120,7 @@ and this brings the working tree and the index back into sync:
 
 Staging changes to the **index** is an interim step. At this point, the
 **working tree** and the **index** are in sync, but the **refs databse** is
-not.
+not:
 
 ```                                      
  INDEX                                     REFS DATABASE
@@ -113,6 +132,9 @@ not.
 |          ...etc       |               |              |   
 *-----------------------*               *--------------*   
 ```                                      
+
+
+### Commiting to the refs db with `git commit`
 
 You can keep working, adding files to the **index** as you go. When you have
 complete your work, and staged all your changes, you **commit** them to the
@@ -129,7 +151,8 @@ complete your work, and staged all your changes, you **commit** them to the
 *-----------------------*                    *--------------------------*   
 ```
 
-Afer you commit, the working tree, index, and refs database are all in sync and `git status` reports `nothing to commit, working tree clean`:
+Afer you commit, the working tree, index, and refs database are all in sync and
+`git status` reports `nothing to commit, working tree clean`:
 
 ```
  WORKING TREE               INDEX                       REFS DATABASE    
@@ -161,6 +184,8 @@ is on GitHub:
 *-----------------*               *--------------* 
 ```
 
+### Send changes to GitHub with `git push`
+
 To get the repository on your laptop and the repository on GitHub back in sync,
 you need to *push* your changes to GitHub:
 
@@ -177,7 +202,7 @@ you need to *push* your changes to GitHub:
 *-----------------*                 *----------------* 
 ```
 
-### Fetching
+### Fetching changes from Github with `git fetch`
 
 Now you know how to push changes to GitHub. But what if there are changes that
 you need to get from GitHub to your local copy of the repository?
@@ -232,11 +257,12 @@ only the refs database and not your working tree:
 *-------------*        *--------------------------*   
 ```                   
 
-To bring the changes from these new refs into your working directory, you need
-to `git merge` or `git rebase`. 
+### Applying new commits with `git rebase` or `git merge`
 
-For Zulip, you'll always want to use `git
-rebase`:
+To bring the changes from these new refs into your working directory, you need
+to `git merge` or `git rebase`.
+
+For Zulip, you'll always want to use `git rebase`:
 
 ```
  WORKING TREE                                 REFS DATABASE
