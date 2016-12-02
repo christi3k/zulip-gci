@@ -46,11 +46,11 @@ repository located at *url*.
 This copy has a **.git** directory and a **working copy**, just like every Git
 repository.
 
-The Git repository that you have cloned to your laptop, or on a remote server,
+The Git repository that you have cloned to your laptop, or on a server,
 are basically the same as the repository that is hosted on GitHub:
 
 ```
- LAPTOP              GITHUB              REMOTE SERVER
+ LAPTOP              GITHUB              SERVER
 *--------------*    *--------------*    *--------------*
 | .git         |    | .git         |    | .git         |
 |--------------|    |--------------|    |--------------|
@@ -92,14 +92,14 @@ against your *index* and tells you what has changed.
 In this example, we have created a new file, `changes.py`:
 
 ```                                      
- WORKING TREE                              INDEX                 
-*-------------------------*               *--------------*   
-|            LICENSE      |               | LICENSE      |   
-|            README.md    |      !=       | README.md    |   
-|            Vagrantfile  |  out of sync  | Vagrantfile  |   
-| modified:  changes.py   |               | ...etc       |   
-|            ...etc       |               |              |   
-*-------------------------*               *--------------*   
+ WORKING TREE                         INDEX                   REFS DATABASE    
+*-------------------------*          *--------------*        *--------------*
+|            LICENSE      |          | LICENSE      |        | LICENSE      |
+|            README.md    |    !=    | README.md    |   ==   | README.md    |
+|            Vagrantfile  |  out of  | Vagrantfile  |   in   | Vagrantfile  |
+| modified:  changes.py   |   sync   | ...etc       |  sync  | ...etc       |
+|            ...etc       |          |              |        |              |
+*-------------------------*          *--------------*        *--------------*
 ```                                      
 
 ### Staging to the index with `git add`
@@ -108,31 +108,19 @@ As you complete work, you **stage** these files to the **index** with `git add`
 and this brings the *working tree* and the *index* back into sync:
 
 ```
- WORKING TREE                               INDEX                 
-*-------------------------*                *-----------------------*   
-|            LICENSE      |  git add       |          LICENSE      |   
-|            README.md    |  ---------->   |          README.md    |   
-|            Vagrantfile  |  adds changes  |          Vagrantfile  |   
-| modified:  changes.py   |  to index      | staged:  changes.py   |   
-|            ...etc       |                |          ...etc       |   
-*-------------------------*                *-----------------------*   
+ WORKING TREE                                INDEX                              REFS DATABASE
+*-------------------------*                 *-----------------------*          *--------------*
+|            LICENSE      |  git add        |          LICENSE      |          | LICENSE      |
+|            README.md    |  ---------->    |          README.md    |    !=    | README.md    |
+|            Vagrantfile  |  adds changes   |          Vagrantfile  |  out of  | Vagrantfile  |
+| modified:  changes.py   |  to index       | staged:  changes.py   |   sync   | ...etc       |
+|            ...etc       |  (now in sync)  |          ...etc       |          |              |
+*-------------------------*                 *-----------------------*          *--------------*
 ```
 
 Staging changes to the **index** is an interim step. At this point, the
 **working tree** and the **index** are in sync, but the **refs databse** is
-not:
-
-```                                      
- INDEX                                     REFS DATABASE
-*-----------------------*               *--------------*   
-|          LICENSE      |               | LICENSE      |   
-|          README.md    |      !=       | README.md    |   
-|          Vagrantfile  |  out of sync  | Vagrantfile  |   
-| staged:  changes.py   |               | ...etc       |   
-|          ...etc       |               |              |   
-*-----------------------*               *--------------*   
-```                                      
-
+not.
 
 ### Commiting to the refs db with `git commit`
 
@@ -141,28 +129,28 @@ complete your work, and staged all your changes, you **commit** them to the
 **refs database** with `git commit`:
 
 ```
- INDEX                                        REFS DATABASE
-*-----------------------*                    *--------------------------*   
-|          LICENSE      |  git commit        |             LICENSE      |   
-|          README.md    |  ---------->       |             README.md    |   
-|          Vagrantfile  |  creates a commit  |             Vagrantfile  |   
-| staged:  changes.py   |  and adds it to    | committed:  changes.py   |   
-|          ...etc       |  refs database     |             ...etc       |   
-*-----------------------*                    *--------------------------*   
+ WORKING TREE                       INDEX                                     REFS DATABASE              
+*------------------------*        *----------------------*  git commit       *-------------------------*
+|            LICENSE     |        |          LICENSE     |  ---------->      |             LICENSE     |
+|            README.md   |   ==   |          README.md   |  creates a commit |             README.md   |
+|            Vagrantfile |   in   |          Vagrantfile |  and adds it to   |             Vagrantfile |
+| modified:  changes.py  |  sync  | staged:  changes.py  |  refs database    | committed:  changes.py  |
+|            ...etc      |        |          ...etc      |  (now in sync)    |             ...etc      |
+*------------------------*        *----------------------*                   *-------------------------*
 ```
 
 Afer you commit, the working tree, index, and refs database are all in sync and
-`git status` reports `nothing to commit, working tree clean`:
+`git status` reports `nothing to commit, working tree clean`.
 
 ```
- WORKING TREE               INDEX                       REFS DATABASE    
-*--------------*           *--------------*            *--------------*   
-| LICENSE      |           | LICENSE      |            | LICENSE      |   
-| README.md    |    ==     | README.md    |     ==     | README.md    |   
-| Vagrantfile  |  in sync  | Vagrantfile  |   in sync  | Vagrantfile  |   
-| changes.py   |    ==     | changes.py   |     ==     | changes.py   |   
-| ...etc       |           | ...etc       |            | ...etc       |   
-*--------------*           *--------------*            *--------------*   
+ WORKING TREE            INDEX                   REFS DATABASE    
+*--------------*        *--------------*        *--------------*   
+| LICENSE      |        | LICENSE      |        | LICENSE      |   
+| README.md    |   ==   | README.md    |   ==   | README.md    |   
+| Vagrantfile  |   in   | Vagrantfile  |   in   | Vagrantfile  |   
+| changes.py   |  sync  | changes.py   |  sync  | changes.py   |   
+| ...etc       |        | ...etc       |        | ...etc       |   
+*--------------*        *--------------*        *--------------*   
 ```
 
 ## How to keep repositories in sync
