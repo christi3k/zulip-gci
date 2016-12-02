@@ -204,23 +204,23 @@ push changes from your laptop to GitHub, those two are in sync. However, the
 copy of the repository on the server is not:
 
 ```
- LAPTOP                        
-*----------------*             
-| .git (updated) |             
-|----------------|             
-| LICENSE        |    ==       
-| README.md      |    in  --   
-| Vagrantfile    |   sync   \       GITHUB           
-| changes.py     |           \     *----------------*
-| ...etc         |            \    | .git (updated) |
-*----------------*             \   |----------------|
-                                \  | LICENSE        |
- SERVER                          \ | README.md      |
-*----------------*               / | Vagrantfile    |
-| .git           |              /  | changes.py     |
-|----------------|             /   | ...etc         |
-| LICENSE        |    !=      /    *----------------*
-| README.md      |  out of --/
+ LAPTOP                      
+*----------------*           
+| .git (updated) |           
+|----------------|           
+| LICENSE        |    ==     
+| README.md      |    in     
+| Vagrantfile    |   sync \       GITHUB           
+| changes.py     |         \     *----------------*
+| ...etc         |          \    | .git (updated) |
+*----------------*           \   |----------------|
+                              \  | LICENSE        |
+ SERVER                        \ | README.md      |
+*----------------*             / | Vagrantfile    |
+| .git           |            /  | changes.py     |
+|----------------|           /   | ...etc         |
+| LICENSE        |    !=    /    *----------------*
+| README.md      |  out of /
 | Vagrantfile    |   sync 
 | ...etc         |        
 |                |        
