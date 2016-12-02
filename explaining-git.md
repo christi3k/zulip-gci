@@ -160,16 +160,16 @@ to your laptop, it will become out of sync with the copy of the repository that
 is on GitHub:
 
 ```
- LAPTOP                            GITHUB          
-*-----------------*               *--------------* 
-| .git (updated)  |               | .git         | 
-|-----------------|               |--------------| 
-| LICENSE         |      !=       | LICENSE      | 
-| README.md       |  out of sync  | README.md    | 
-| Vagrantfile     |               | Vagrantfile  | 
-| changes.py      |               | ...etc       | 
-| ...etc          |               |              | 
-*-----------------*               *--------------* 
+ LAPTOP                     GITHUB          
+*-----------------*        *--------------* 
+| .git (updated)  |        | .git         | 
+|-----------------|        |--------------| 
+| LICENSE         |   !=   | LICENSE      | 
+| README.md       | out of | README.md    | 
+| Vagrantfile     |  sync  | Vagrantfile  | 
+| changes.py      |        | ...etc       | 
+| ...etc          |        |              | 
+*-----------------*        *--------------* 
 ```
 
 ### Send changes to GitHub with `git push`
@@ -186,7 +186,7 @@ you need to *push* your changes to GitHub:
 | README.md       |  send new refs  | README.md      | 
 | Vagrantfile     |  from laptop    | Vagrantfile    | 
 | changes.py      |  to GitHub      | changes.py     | 
-| ...etc          |                 | ...etc         | 
+| ...etc          |  (now in sync)  | ...etc         | 
 *-----------------*                 *----------------* 
 ```
 
@@ -195,30 +195,44 @@ you need to *push* your changes to GitHub:
 Now you know how to push changes to GitHub. But what if there are changes that
 you need to get from GitHub to your local copy of the repository?
 
-You might need to do this to update a remote server, or to get changes someone
-else has pushed to GitHub. The process is the same for both situations.
+You might need to do this to update a repository cloned on a server, or to get
+changes someone else has pushed to GitHub. The process is the same for both
+situations.
 
-We'll use the example of a remote server. After you push changes from your
-laptop to GitHub, those two are in sync. However, the remote server is not:
-
-```
- LAPTOP                       GITHUB                      REMOTE SERVER
-*----------------*          *----------------*          *--------------*
-| .git (updated) |          | .git (updated) |          | .git         |
-|----------------|          |----------------|          |--------------|
-| LICENSE        |    ==    | LICENSE        |    !=    | LICENSE      |
-| README.md      |    in    | README.md      |  out of  | README.md    |
-| Vagrantfile    |   sync   | Vagrantfile    |   sync   | Vagrantfile  |
-| changes.py     |          | changes.py     |          | ...etc       |
-| ...etc         |          | ...etc         |          |              |
-*----------------*          *----------------*          *--------------*
-```
-
-To get the remote server in sync, you first need to update the **refs db** on
-the remote server by **fetching** new commits:
+We'll use the example of updated a repository cloned on a server. After you
+push changes from your laptop to GitHub, those two are in sync. However, the
+copy of the repository on the server is not:
 
 ```
- REMOTE SERVER                        GITHUB            
+ LAPTOP                        
+*----------------*             
+| .git (updated) |             
+|----------------|             
+| LICENSE        |    ==       
+| README.md      |    in  --   
+| Vagrantfile    |   sync   \       GITHUB           
+| changes.py     |           \     *----------------*
+| ...etc         |            \    | .git (updated) |
+*----------------*             \   |----------------|
+                                \  | LICENSE        |
+ SERVER                          \ | README.md      |
+*----------------*               / | Vagrantfile    |
+| .git           |              /  | changes.py     |
+|----------------|             /   | ...etc         |
+| LICENSE        |    !=      /    *----------------*
+| README.md      |  out of --/
+| Vagrantfile    |   sync 
+| ...etc         |        
+|                |        
+*----------------*        
+
+```
+
+To get the server's repository in sync, you first need to update the **refs
+db** on the server by **fetching** new commits:
+
+```
+ SERVER                               GITHUB            
 *-----------------*                  *-----------------*
 | .git (updated)  |                  | .git (updated)  |
 |-----------------|    git fetch     |-----------------|
